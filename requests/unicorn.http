@@ -1,0 +1,15 @@
+DELETE https://crudcrud.com/api/79e45428a5974cc392889a461488bc0d/unicorns/79e45428a5974cc392889a461488bc0d
+Accept: application/json
+
+###
+POST https://crudcrud.com/api/7dcf838965ee470a989498fcb05dabe8/unicorns
+Content-Type: application/json
+
+{
+    "name": "Donald",
+    "tail": "white"
+}
+
+###
+GET https://crudcrud.com/api/79e45428a5974cc392889a461488bc0d/unicorns/79e45428a5974cc392889a461488bc0d
+
