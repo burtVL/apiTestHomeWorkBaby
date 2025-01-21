@@ -5,6 +5,8 @@ import io.restassured.filter.log.RequestLoggingFilter;
 import io.restassured.filter.log.ResponseLoggingFilter;
 import io.restassured.http.ContentType;
 import org.apache.http.HttpStatus;
+import org.example.api.UnicornRequests;
+import org.example.api.models.Unicorn;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -17,42 +19,23 @@ public class SimpleTest {
     @BeforeAll
     public static void setupTests() {
         RestAssured.filters(new RequestLoggingFilter(), new ResponseLoggingFilter());
-        RestAssured.baseURI = "https://crudcrud.com/api/8623c44dfe5d4ad5a6a42330ff072a93";
+        RestAssured.baseURI = "https://crudcrud.com/api/69cae24fd4e14aedb4e0ba715e6d87a0";
     }
 
     @Test
     public void userShouldBeAbleCreateUnicorn() {
         //given-when-than BDD
-        given()
-                .body("{\n" +
-                        "    \"name\": \"Donald\",\n" +
-                        "    \"tail\": \"white\"\n" +
-                        "}")
-                .contentType(ContentType.JSON)
-                .when()
-                .post("/unicorns")
-                .then()
-                .assertThat()
-                .statusCode(201)
-                .body("$", hasKey("_id"));
+        // Серилизация из json в объект и наоборот
+
+        Unicorn unicorn = new Unicorn("Donald","white");
+
+        UnicornRequests.createUnicorn(unicorn.toJson());
     }
 
     @Test
     public void userShouldBeAbleChangeTailColor() {
-        String id = given()
-                .body("{\n" +
-                        "    \"name\": \"Snow\",\n" +
-                        "    \"tail\": \"black\"\n" +
-                        "}")
-                .contentType(ContentType.JSON)
-                .when()
-                .post("/unicorns")
-                .then()
-                .assertThat()
-                .statusCode(201)
-                .body("$", hasKey("_id"))
-                .extract()
-                .path("_id");
+        // Шаг 1. Создание единорога
+       String id = UnicornRequests.createUnicorn("{\n" + " \"name\": \"Snow\",\n" + " \"tail\": \"black\"\n" + "}");
 
         //Шаг 2. Изменение хвоста цвета единорога
 
@@ -85,27 +68,11 @@ public class SimpleTest {
 
 
         //Шаг 1. Создание единорога
-        String id = given()
-                .body("{\n" +
-                        "    \"name\": \"Romeo\",\n" +
-                        "    \"tail\": \"red\"\n" +
-                        "}")
-                .contentType(ContentType.JSON)
-                .when()
-                .post("/unicorns")
-                .then()
-                .assertThat()
-                .statusCode(201)
-                .body("$", hasKey("_id"))
-                .extract()
-                .path("_id");
+       String id = UnicornRequests.createUnicorn("{\n" + " \"name\": \"Romeo\",\n" + " \"tail\": \"red\"\n" + "}");
 
         //Шаг 2. Удаление единорога
 
-        given().delete("/unicorns/" + id)
-                .then()
-                .assertThat()
-                .statusCode(200);
+        UnicornRequests.deleteUnicorn(id);
 
         // Шаг 3. Проверить, что единорога болше не существует
 
