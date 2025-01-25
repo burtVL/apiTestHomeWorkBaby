@@ -1,32 +1,15 @@
 package org.example.api.models;
 
+import com.google.gson.annotations.SerializedName;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+
+@Data
+@AllArgsConstructor
 public class Unicorn {
     private  String name;
     private  String tail;
+    @SerializedName("_id")
+    private String id;
 
-    public Unicorn(String name, String tail) {
-        this.name = name;
-        this.tail = tail;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getTail() {
-        return tail;
-    }
-
-    @Override
-    public String toString() {
-        return "Unicorn{" +
-                "name='" + name + '\'' +
-                ", tail='" + tail + '\'' +
-                '}';
-    }
-
-    public String toJson() {
-        return "{" + "\"name\":\"" + name + "\", \"tail\":\"" + tail + "\"" + "}";
-
-    }
 }

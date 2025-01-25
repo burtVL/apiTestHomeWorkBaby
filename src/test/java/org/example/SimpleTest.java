@@ -19,7 +19,7 @@ public class SimpleTest {
     @BeforeAll
     public static void setupTests() {
         RestAssured.filters(new RequestLoggingFilter(), new ResponseLoggingFilter());
-        RestAssured.baseURI = "https://crudcrud.com/api/69cae24fd4e14aedb4e0ba715e6d87a0";
+        RestAssured.baseURI = "https://crudcrud.com/api/830338ae9d0c4f608884cc471b8ee326";
     }
 
     @Test
@@ -27,15 +27,18 @@ public class SimpleTest {
         //given-when-than BDD
         // Серилизация из json в объект и наоборот
 
-        Unicorn unicorn = new Unicorn("Donald","white");
+        Unicorn unicorn = new Unicorn("Donald","white", "");
 
-        UnicornRequests.createUnicorn(unicorn.toJson());
+        UnicornRequests.createUnicorn(unicorn);
     }
 
     @Test
     public void userShouldBeAbleChangeTailColor() {
+
         // Шаг 1. Создание единорога
-       String id = UnicornRequests.createUnicorn("{\n" + " \"name\": \"Snow\",\n" + " \"tail\": \"black\"\n" + "}");
+
+        Unicorn unicorn = new Unicorn("Snow","black", "");
+        Unicorn createUnicorn = UnicornRequests.createUnicorn(unicorn);
 
         //Шаг 2. Изменение хвоста цвета единорога
 
@@ -45,7 +48,7 @@ public class SimpleTest {
                         "}")
                 .contentType(ContentType.JSON)
                 .when()
-                .put("/unicorns/" + id)
+                .put("/unicorns/" + createUnicorn.getId())
                 .then()
                 .assertThat()
                 .statusCode(200);
@@ -54,7 +57,7 @@ public class SimpleTest {
 
         given()
                 .when()
-                .get("/unicorns/" + id)
+                .get("/unicorns/" + createUnicorn.getId())
                 .then()
                 .assertThat()
                 .statusCode(200)
@@ -68,16 +71,18 @@ public class SimpleTest {
 
 
         //Шаг 1. Создание единорога
-       String id = UnicornRequests.createUnicorn("{\n" + " \"name\": \"Romeo\",\n" + " \"tail\": \"red\"\n" + "}");
+
+        Unicorn unicorn = new Unicorn("Romeo","red", "");
+        Unicorn createdUnicorn = UnicornRequests.createUnicorn(unicorn);
 
         //Шаг 2. Удаление единорога
 
-        UnicornRequests.deleteUnicorn(id);
+        UnicornRequests.deleteUnicorn(createdUnicorn.getId());
 
         // Шаг 3. Проверить, что единорога болше не существует
 
         given()
-                .get("/unicorns/" + id)
+                .get("/unicorns/" + createdUnicorn.getId())
                 .then()
                 .assertThat()
                 .statusCode(HttpStatus.SC_NOT_FOUND);
