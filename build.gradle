@@ -17,6 +17,7 @@ dependencies {
     testImplementation 'com.google.code.gson:gson:2.8.9'
     testCompileOnly 'org.projectlombok:lombok:1.18.36'
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.36'
+    testImplementation 'com.codeborne:selenide:7.5.1'
 
 }
 
